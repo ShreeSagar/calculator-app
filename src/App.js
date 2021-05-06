@@ -1,25 +1,74 @@
-import logo from './logo.svg';
+import React, { Component } from 'react';
+import ResultComponents from './Components/ResultComponents.js';
+import KeypadComponents from './Components/KeypadComponents.js';
 import './App.css';
 
-function App() {
-  return (
+class App extends Component{
+  //Constructor
+  constructor(){
+    super();
+
+    this.state = {
+        result: ""
+    }
+}
+
+ //calculate function
+ calculate = () => {
+    try {
+      this.setState({
+        result: (eval(this.state.result)|| ""  + "")
+      });
+    } 
+    catch (error) {
+      this.setState({
+        result:"error"
+      });
+    }
+ };
+
+ //backspace function
+ backspace = () =>{
+  this.setState({
+    result: this.state.result.slice(0, -1)
+})
+};
+
+//reset function
+reset = () => {
+  this.setState({
+      result: ""
+  })
+};
+ 
+//onClick function
+onClick = button =>{
+  if(button === "="){
+    this.calculate();
+  }
+  else if(button === "CE"){
+    this.backspace();
+  }
+  else if(button === "C"){
+    this.reset();
+  }
+  else {
+    this.setState({
+        result: this.state.result + button
+    })
+}
+};
+
+  render(){
+    return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="calculator-body">
+        <h1>Simple Calculator</h1>
+          <ResultComponents result={this.state.result}/>
+          <KeypadComponents onClick={this.onClick}/>
+      </div>
     </div>
   );
 }
-
+}
 export default App;
